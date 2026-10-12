@@ -25,10 +25,13 @@
         <Setter Property="Background" Value="{StaticResource WindowBackground}" />
     </Style>
 
+    <!-- FontFamily only: forcing Foreground here leaks into native
+         menus and makes the tray menu unreadable. Light text reaches
+         the UI through the implicit Window style instead. -->
     <Style TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
     </Style>
+
 
     <Style x:Key="PrimaryButton" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource Accent}" />
@@ -137,87 +140,6 @@
                         Height="1"
                         Background="{TemplateBinding Background}"
                         SnapsToDevicePixels="True" />
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- Tray / context menus: the native template is white-on-white
-         inside this dark theme, so both controls get a full dark look. -->
-    <Style TargetType="ContextMenu">
-        <Setter Property="Background" Value="{StaticResource SidebarBackground}" />
-        <Setter Property="BorderBrush" Value="{StaticResource GhostBorder}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="4" />
-        <Setter Property="FontSize" Value="13" />
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
-        <Setter Property="HasDropShadow" Value="False" />
-    </Style>
-
-    <Style TargetType="MenuItem">
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="12,7" />
-        <Setter Property="FontSize" Value="13" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="MenuItem">
-                    <Grid>
-                        <Border
-                            x:Name="Bd"
-                            Background="{TemplateBinding Background}"
-                            Padding="{TemplateBinding Padding}"
-                            CornerRadius="4">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <ContentPresenter
-                                    ContentSource="Header"
-                                    VerticalAlignment="Center"
-                                    RecognizesAccessKey="True" />
-                                <Path
-                                    x:Name="Arrow"
-                                    Grid.Column="1"
-                                    Margin="14,0,2,0"
-                                    VerticalAlignment="Center"
-                                    Data="M 0 0 L 4 3.5 L 0 7 Z"
-                                    Fill="{TemplateBinding Foreground}"
-                                    Visibility="Collapsed" />
-                            </Grid>
-                        </Border>
-                        <Popup
-                            x:Name="SubmenuPopup"
-                            AllowsTransparency="True"
-                            Focusable="False"
-                            IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                            Placement="Right"
-                            PopupAnimation="Fade"
-                            VerticalOffset="-3">
-                            <Border
-                                Background="{StaticResource SidebarBackground}"
-                                BorderBrush="{StaticResource GhostBorder}"
-                                BorderThickness="1"
-                                CornerRadius="6"
-                                Padding="4">
-                                <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Cycle" />
-                            </Border>
-                        </Popup>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="Role" Value="SubmenuHeader">
-                            <Setter TargetName="Arrow" Property="Visibility" Value="Visible" />
-                        </Trigger>
-                        <Trigger Property="IsHighlighted" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="#2A2F38" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
-                            <Setter Property="Opacity" Value="0.7" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
