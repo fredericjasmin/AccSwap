@@ -29,6 +29,7 @@ public sealed class TrayService : IDisposable
             ToolTipText = "GLAS",
         };
         _icon.TrayMouseDoubleClick += (_, _) => ShowMainWindow();
+        _icon.TrayLeftMouseUp += (_, _) => ShowMainWindow();
         _ = RebuildMenuAsync();
     }
 
@@ -81,17 +82,13 @@ public sealed class TrayService : IDisposable
                 continue;
             }
 
-            var platformItem = new MenuItem { Header = MenuText(platform.Name) };
             IReadOnlyList<Core.Account> accounts = await core.ListAccountsAsync();
             if (accounts.Count == 0)
             {
-                var empty = new MenuItem
-                {
-                    Header = MenuText(loc["Accounts.Empty.Title"]),
-                    IsEnabled = false,
-                };
-                platformItem.Items.Add(empty);
+                continue; // only platforms with saved accounts appear in the tray menu
             }
+
+            var platformItem = new MenuItem { Header = MenuText(platform.Name) };
 
             foreach (Core.Account account in accounts)
             {
