@@ -25,11 +25,9 @@
         <Setter Property="Background" Value="{StaticResource WindowBackground}" />
     </Style>
 
-    <!-- FontFamily only: forcing Foreground here leaks into native
-         menus and makes the tray menu unreadable. Light text reaches
-         the UI through the implicit Window style instead. -->
     <Style TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI Variable Display, Segoe UI" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
     </Style>
 
 

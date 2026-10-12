@@ -59,6 +59,32 @@ public sealed class TrayService : IDisposable
         Loc loc = Loc.Instance;
         var menu = new ContextMenu();
 
+        // The app-wide implicit TextBlock style is light; the native menu
+        // background is white. Scope a black-text style to this menu only
+        // so its entries stay readable without touching the theme.
+        menu.Resources[typeof(System.Windows.Controls.TextBlock)] = new System.Windows.Style(
+            typeof(System.Windows.Controls.TextBlock))
+        {
+            Setters =
+            {
+                new System.Windows.Setter(
+                    System.Windows.Controls.TextBlock.ForegroundProperty,
+                    System.Windows.SystemColors.WindowTextBrush),
+            },
+        };
+        menu.Resources[typeof(Separator)] = new System.Windows.Style(typeof(Separator))
+        {
+            Setters =
+            {
+                new System.Windows.Setter(
+                    Separator.BackgroundProperty,
+                    new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD0, 0xD3, 0xD8))),
+                new System.Windows.Setter(
+                    Separator.ForegroundProperty,
+                    new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD0, 0xD3, 0xD8))),
+            },
+        };
+
         foreach (PlatformPanelViewModel platform in _viewModel.Platforms)
         {
             IPlatform? core = AppServices.Instance.Platforms.Find(platform.Id);
