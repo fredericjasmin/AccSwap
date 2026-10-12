@@ -59,19 +59,7 @@ public sealed class TrayService : IDisposable
         Loc loc = Loc.Instance;
         var menu = new ContextMenu();
 
-        // The app-wide implicit TextBlock style is light; the native menu
-        // background is white. Scope a black-text style to this menu only
-        // so its entries stay readable without touching the theme.
-        menu.Resources[typeof(System.Windows.Controls.TextBlock)] = new System.Windows.Style(
-            typeof(System.Windows.Controls.TextBlock))
-        {
-            Setters =
-            {
-                new System.Windows.Setter(
-                    System.Windows.Controls.TextBlock.ForegroundProperty,
-                    System.Windows.SystemColors.WindowTextBrush),
-            },
-        };
+        // Light separator for the white native menu (the app-wide one is dark).
         menu.Resources[typeof(Separator)] = new System.Windows.Style(typeof(Separator))
         {
             Setters =
@@ -93,13 +81,13 @@ public sealed class TrayService : IDisposable
                 continue;
             }
 
-            var platformItem = new MenuItem { Header = platform.Name };
+            var platformItem = new MenuItem { Header = MenuText(platform.Name) };
             IReadOnlyList<Core.Account> accounts = await core.ListAccountsAsync();
             if (accounts.Count == 0)
             {
                 var empty = new MenuItem
                 {
-                    Header = loc["Accounts.Empty.Title"],
+                    Header = MenuText(loc["Accounts.Empty.Title"]),
                     IsEnabled = false,
                 };
                 platformItem.Items.Add(empty);
@@ -109,10 +97,9 @@ public sealed class TrayService : IDisposable
             {
                 var accountItem = new MenuItem
                 {
-                    Header = account.DisplayLabel,
+                    Header = MenuText(account.DisplayLabel, account.IsActive),
                     IsCheckable = false,
                     IsChecked = false,
-                    FontWeight = account.IsActive ? FontWeights.SemiBold : FontWeights.Normal,
                 };
                 string accountId = account.Id;
                 string platformId = platform.Id;
@@ -140,10 +127,23 @@ public sealed class TrayService : IDisposable
 
     private static MenuItem MakeItem(string header, Action action)
     {
-        var item = new MenuItem { Header = header };
+        var item = new MenuItem { Header = MenuText(header) };
         item.Click += (_, _) => action();
         return item;
     }
+
+    /// <summary>
+    /// Native menu text: an explicit TextBlock with a local black Foreground.
+    /// The app's light implicit styles cannot override a local value, so the
+    /// entries stay readable on the white native menu.
+    /// </summary>
+    private static System.Windows.Controls.TextBlock MenuText(string text, bool bold = false) =>
+        new()
+        {
+            Text = text,
+            Foreground = System.Windows.SystemColors.WindowTextBrush,
+            FontWeight = bold ? FontWeights.SemiBold : FontWeights.Normal,
+        };
 
     private void ShowMainWindow()
     {
