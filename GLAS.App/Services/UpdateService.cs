@@ -144,17 +144,24 @@ public static class UpdateService
     private static void OpenPage(string url) =>
         Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 
-    /// <summary>Removes the leftover backup from a previous self-update.</summary>
+    /// <summary>
+    /// Removes the leftover backup from a previous self-update and gives the
+    /// exe its stable name: an update keeps the old file name, so
+    /// "GLAS-v0.1.0.exe" would keep claiming to be an old version. Renaming
+    /// a running exe is allowed on Windows. The autostart entry follows the
+    /// exe when it pointed at the old name.
+    /// </summary>
     public static void CleanupPreviousUpdate()
     {
-        if (Environment.ProcessPath is not { } exe)
+        if (Environment.ProcessPath is not { } exe
+            || exe.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
 
+        string old = exe + ".old";
         try
         {
-            string old = exe + ".old";
             if (File.Exists(old))
             {
                 File.Delete(old);
@@ -163,6 +170,53 @@ public static class UpdateService
         catch
         {
             // Best effort: a locked .old disappears eventually.
+            return;
+        }
+
+        string stableName = Path.Combine(Path.GetDirectoryName(exe)!, "GLAS.exe");
+        if (exe.Equals(stableName, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        try
+        {
+            if (File.Exists(stableName))
+            {
+                return; // do not clobber an unrelated GLAS.exe in the same folder
+            }
+
+            File.Move(exe, stableName);
+            FollowAutostart(exe, stableName);
+        }
+        catch
+        {
+            // Renaming is cosmetic: a failed rename must not break startup.
+        }
+    }
+
+    /// <summary>Repoints the autostart entry at the exe's new name.</summary>
+    private static void FollowAutostart(string oldPath, string newPath)
+    {
+        try
+        {
+            var registry = AppServices.Instance.Registry;
+            string? value = registry.GetStringValue(
+                GLAS.Core.RegistryAccess.RegistryHive.CurrentUser,
+                @"Software\Microsoft\Windows\CurrentVersion\Run",
+                "GLAS");
+            if (value is not null && value.Contains(oldPath, StringComparison.OrdinalIgnoreCase))
+            {
+                registry.SetStringValue(
+                    GLAS.Core.RegistryAccess.RegistryHive.CurrentUser,
+                    @"Software\Microsoft\Windows\CurrentVersion\Run",
+                    "GLAS",
+                    $"\"{newPath}\"");
+            }
+        }
+        catch
+        {
+            // Autostart is best effort too.
         }
     }
 
