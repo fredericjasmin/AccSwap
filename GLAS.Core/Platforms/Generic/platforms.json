@@ -1,0 +1,225 @@
+[
+  // Definitions follow the same mechanics as TcNo-Acc-Switcher's Platforms.json.
+  // Path variables: %LocalAppData%, %AppData%, %ProgramData%, %ProgramFiles(x86)%, %ProgramFiles%.
+  // Target types: File, Glob, Directory, Registry, JsonField.
+  // Unique id kinds: FileHash, FileRegex, DirHash, RegistryValue, JsonField.
+  {
+    "id": "riot",
+    "name": "Riot Games",
+    "exeCandidates": [
+      "%LocalAppData%\\Riot Games\\Riot Client\\RiotClientServices.exe",
+      "C:\\Riot Games\\Riot Client\\RiotClientServices.exe",
+      "%ProgramFiles(x86)%\\Riot Games\\Riot Client\\RiotClientServices.exe",
+      "%ProgramFiles%\\Riot Games\\Riot Client\\RiotClientServices.exe"
+    ],
+    "shortcutNames": [ "Riot Client" ],
+    "uninstall": {
+      "displayNamePattern": "^Riot Client$",
+      "relativeExe": "Riot Client\\RiotClientServices.exe"
+    },
+    "processesToClose": [
+      "LeagueClient",
+      "LoR",
+      "VALORANT",
+      "RiotClientServices",
+      "RiotClientUx",
+      "RiotClientUxRender"
+    ],
+    "targets": [
+      { "type": "Directory", "path": "%LocalAppData%\\Riot Games\\Riot Client\\Data" },
+      { "type": "Directory", "path": "%LocalAppData%\\Riot Games\\Riot Client\\Config" }
+    ],
+    "uniqueId": { "kind": "DirHash", "path": "%LocalAppData%\\Riot Games\\Riot Client\\Data" }
+  },
+  {
+    "id": "ubisoft",
+    "name": "Ubisoft Connect",
+    "exeCandidates": [
+      "%ProgramFiles(x86)%\\Ubisoft\\Ubisoft Game Launcher\\upc.exe",
+      "%ProgramFiles%\\Ubisoft\\Ubisoft Game Launcher\\upc.exe",
+      "C:\\Program Files (x86)\\Ubisoft\\Ubisoft Game Launcher\\upc.exe"
+    ],
+    "shortcutNames": [ "Ubisoft Connect", "Uplay" ],
+    "uninstall": {
+      "displayNamePattern": "Ubisoft Connect|Uplay",
+      "relativeExe": "Ubisoft Game Launcher\\upc.exe"
+    },
+    "processesToClose": [ "upc", "UplayService", "UplayWebCore" ],
+    "targets": [
+      { "type": "File", "path": "%LocalAppData%\\Ubisoft Game Launcher\\ConnectSecureStorage.dat" },
+      { "type": "File", "path": "%LocalAppData%\\Ubisoft Game Launcher\\settings.yaml" },
+      { "type": "File", "path": "%LocalAppData%\\Ubisoft Game Launcher\\user.dat" }
+    ],
+    "uniqueId": { "kind": "FileHash", "path": "%LocalAppData%\\Ubisoft Game Launcher\\user.dat" }
+  },
+  {
+    "id": "tarkov",
+    "name": "Escape from Tarkov",
+    "exeCandidates": [
+      "C:\\Battlestate Games\\BsgLauncher\\BsgLauncher.exe",
+      "%ProgramFiles(x86)%\\Battlestate Games\\BsgLauncher\\BsgLauncher.exe",
+      "%ProgramFiles%\\Battlestate Games\\BsgLauncher\\BsgLauncher.exe"
+    ],
+    "shortcutNames": [ "Escape from Tarkov", "BsgLauncher" ],
+    "uninstall": {
+      "displayNamePattern": "Escape from Tarkov|Battlestate Games",
+      "relativeExe": "BsgLauncher\\BsgLauncher.exe"
+    },
+    "processesToClose": [ "EscapeFromTarkov", "BsgLauncher" ],
+    "targets": [
+      { "type": "File", "path": "%AppData%\\Battlestate Games\\BsgLauncher\\settings" }
+    ],
+    "uniqueId": {
+      "kind": "FileRegex",
+      "path": "%AppData%\\Battlestate Games\\BsgLauncher\\settings",
+      "regex": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+    }
+  },
+  {
+    "id": "battlenet",
+    "name": "Battle.net",
+    "exeCandidates": [
+      "%ProgramFiles(x86)%\\Battle.net\\Battle.net.exe",
+      "%LocalAppData%\\Battle.net\\Battle.net.exe",
+      "%ProgramFiles%\\Battle.net\\Battle.net.exe"
+    ],
+    "shortcutNames": [ "Battle.net" ],
+    "uninstall": {
+      "displayNamePattern": "^Battle\\.net$",
+      "relativeExe": "Battle.net.exe"
+    },
+    "processesToClose": [ "Battle.net" ],
+    "targets": [
+      {
+        "type": "JsonField",
+        "path": "%AppData%\\Battle.net\\Battle.net.config",
+        "jsonPath": "Client.SavedAccountNames"
+      }
+    ],
+    "uniqueId": {
+      "kind": "JsonField",
+      "path": "%AppData%\\Battle.net\\Battle.net.config",
+      "jsonPath": "Client.SavedAccountNames"
+    }
+  },
+  {
+    "id": "ea",
+    "name": "EA Desktop",
+    "exeCandidates": [
+      "%ProgramFiles%\\Electronic Arts\\EA Desktop\\EA Desktop\\EADesktop.exe",
+      "%ProgramFiles(x86)%\\Electronic Arts\\EA Desktop\\EA Desktop\\EADesktop.exe",
+      "%LocalAppData%\\Electronic Arts\\EA Desktop\\EA Desktop\\EADesktop.exe"
+    ],
+    "shortcutNames": [ "EA", "EA Desktop" ],
+    "uninstall": {
+      "displayNamePattern": "EA (app|desktop)",
+      "relativeExe": "EA Desktop\\EA Desktop\\EADesktop.exe"
+    },
+    "processesToClose": [ "EADesktop", "EABackgroundService" ],
+    "targets": [
+      { "type": "Directory", "path": "%LocalAppData%\\Electronic Arts\\EA Desktop" },
+      { "type": "Directory", "path": "%ProgramData%\\EA Desktop" }
+    ],
+    "uniqueId": {
+      "kind": "FileRegex",
+      "path": "%LocalAppData%\\Electronic Arts\\EA Desktop\\telemetry.ini",
+      "regex": "=([^\\r\\n]*)"
+    }
+  },
+  {
+    "id": "gog",
+    "name": "GOG Galaxy",
+    "exeCandidates": [ "%ProgramFiles(x86)%\\GOG Galaxy\\GalaxyClient.exe" ],
+    "shortcutNames": [ "GOG GALAXY", "GOG Galaxy" ],
+    "uninstall": {
+      "displayNamePattern": "GOG GALAXY|GOG Galaxy",
+      "relativeExe": "GalaxyClient.exe"
+    },
+    "processesToClose": [
+      "GalaxyClient",
+      "GOG Galaxy Notifications Renderer",
+      "GalaxyClientService",
+      "GalaxyCommunication"
+    ],
+    "targets": [
+      { "type": "File", "path": "%LocalAppData%\\GOG.com\\Galaxy\\Configuration\\config.json" },
+      {
+        "type": "Registry",
+        "keyPath": "Software\\GOG.com\\Galaxy\\settings",
+        "valueName": "username"
+      },
+      {
+        "type": "Registry",
+        "keyPath": "Software\\GOG.com\\Galaxy",
+        "valueName": "refreshToken"
+      },
+      {
+        "type": "Registry",
+        "keyPath": "Software\\GOG.com\\Galaxy\\settings",
+        "valueName": "userId"
+      },
+      { "type": "Glob", "path": "%ProgramData%\\GOG.com\\Galaxy\\webcache\\common\\Session Storage\\*.log" },
+      { "type": "Glob", "path": "%ProgramData%\\GOG.com\\Galaxy\\webcache\\common\\Session Storage\\*.ldb" },
+      { "type": "File", "path": "%ProgramData%\\GOG.com\\Galaxy\\webcache\\common\\Cache\\index" },
+      { "type": "Glob", "path": "%ProgramData%\\GOG.com\\Galaxy\\webcache\\common\\Cache\\data_*" },
+      { "type": "File", "path": "%ProgramData%\\GOG.com\\Galaxy\\webcache\\common\\Code Cache\\js\\index-dir\\the-real-index" },
+      { "type": "File", "path": "%ProgramData%\\GOG.com\\Galaxy\\webcache\\common\\GPUCache\\index" },
+      { "type": "Directory", "path": "%ProgramData%\\GOG.com\\Galaxy\\webcache\\common\\Local Storage\\leveldb" },
+      { "type": "File", "path": "%ProgramData%\\GOG.com\\Galaxy\\webcache\\common\\Cookies" },
+      { "type": "File", "path": "%ProgramData%\\GOG.com\\Galaxy\\storage\\etags.db" },
+      { "type": "Glob", "path": "%ProgramData%\\GOG.com\\Galaxy\\storage\\galaxy-2.0.db*" },
+      { "type": "File", "path": "%ProgramData%\\GOG.com\\Galaxy\\config.json" }
+    ],
+    "uniqueId": {
+      "kind": "RegistryValue",
+      "keyPath": "Software\\GOG.com\\Galaxy\\settings",
+      "valueName": "userId"
+    }
+  },
+  {
+    "id": "discord",
+    "name": "Discord",
+    "exeCandidates": [ "%LocalAppData%\\Discord\\Update.exe" ],
+    "shortcutNames": [ "Discord", "DiscordPTB" ],
+    "uninstall": {
+      "displayNamePattern": "^Discord",
+      "relativeExe": "Update.exe"
+    },
+    "launchArguments": "--processStart Discord.exe",
+    "processesToClose": [ "Discord" ],
+    "targets": [
+      { "type": "Directory", "path": "%AppData%\\discord\\blob_storage" },
+      { "type": "File", "path": "%AppData%\\discord\\Cache\\index" },
+      { "type": "Glob", "path": "%AppData%\\discord\\Cache\\data_*" },
+      { "type": "File", "path": "%AppData%\\discord\\Code Cache\\js\\index-dir\\the-real-index" },
+      { "type": "Glob", "path": "%AppData%\\discord\\DawnGraphiteCache\\data_*" },
+      { "type": "Glob", "path": "%AppData%\\discord\\DawnWebGPUCache\\data_*" },
+      { "type": "Glob", "path": "%AppData%\\discord\\GPUCache\\data_*" },
+      { "type": "Directory", "path": "%AppData%\\discord\\Local Storage\\leveldb" },
+      { "type": "Directory", "path": "%AppData%\\discord\\Network" },
+      { "type": "Directory", "path": "%AppData%\\discord\\sentry" },
+      { "type": "Directory", "path": "%AppData%\\discord\\Service Worker\\CacheStorage" },
+      { "type": "Directory", "path": "%AppData%\\discord\\Session Storage" },
+      { "type": "Directory", "path": "%AppData%\\discord\\shared_proto_db" },
+      { "type": "File", "path": "%AppData%\\discord\\settings.json" },
+      { "type": "File", "path": "%AppData%\\discord\\Network Persistent State" },
+      { "type": "File", "path": "%AppData%\\discord\\Preferences" },
+      { "type": "File", "path": "%AppData%\\discord\\TransportSecurity" }
+    ],
+    "uniqueId": { "kind": "DirHash", "path": "%AppData%\\discord\\Local Storage\\leveldb" }
+  },
+  {
+    "id": "roblox",
+    "name": "Roblox",
+    "exeCandidates": [ "%LocalAppData%\\Roblox\\Versions" ],
+    "shortcutNames": [ "Roblox Player" ],
+    "processesToClose": [ "RobloxPlayerBeta", "RobloxCrashHandler" ],
+    "targets": [
+      { "type": "File", "path": "%LocalAppData%\\Roblox\\LocalStorage\\appStorage.json" },
+      { "type": "File", "path": "%LocalAppData%\\Roblox\\LocalStorage\\RobloxCookies.dat" },
+      { "type": "File", "path": "%LocalAppData%\\Roblox\\UniversalApp\\WebView2\\EBWebView\\Default\\Network\\Cookies" },
+      { "type": "File", "path": "%LocalAppData%\\Roblox\\UniversalApp\\WebView2\\EBWebView\\Default\\Network\\Cookies-journal" }
+    ],
+    "uniqueId": { "kind": "FileHash", "path": "%LocalAppData%\\Roblox\\LocalStorage\\RobloxCookies.dat" }
+  }
+]

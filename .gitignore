@@ -1,0 +1,28 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+publish/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.rsuser
+
+# Test results
+TestResults/
+[Ll]ogs/
+
+# NuGet
+*.nupkg
+packages/
+
+# Reference projects (third-party, kept locally for study only)
+otros/
+
+# OS junk
+Thumbs.db
+.DS_Store
