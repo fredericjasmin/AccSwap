@@ -1,6 +1,6 @@
 # GLAS — Game Launcher Account Switcher
 
-Plan de desarrollo para un switcher de cuentas de gaming para Windows, inspirado en TcNo Acc-Switcher, AccShift y Epic Switcher (legacy), con objetivo de superarlos en robustez y seguridad.
+Plan de desarrollo para un switcher de cuentas de gaming para Windows, con objetivo de máxima robustez y seguridad.
 
 - **Nombre:** GLAS (Game Launcher Account Switcher)
 - **Stack:** C# + .NET 10 (LTS) + WPF (patrón MVVM)
@@ -11,22 +11,7 @@ Plan de desarrollo para un switcher de cuentas de gaming para Windows, inspirado
 
 ---
 
-## 1. Referencias de estudio
-
-Fuentes en `otros/`:
-
-| Carpeta | Stack | Qué tomar de cada uno |
-|---|---|---|
-| `TcNo-Acc-Switcher-master` | Go + Wails | Features avanzadas: atajos de escritorio por cuenta, tray, i18n, updater, módulo `vdfsafe` para manipular VDF sin romperlo |
-| `accshift-main` | Tauri + Rust + Svelte | Diseño del core limpio (`crates/accshift-core`): snapshots, lock de procesos, cifrado (`snapshot_crypto.rs`), secrets |
-| `epic-switcher-legacy-main` | C# + WPF + MVVM | Esqueleto MVVM y lógica Epic completa en `Services/EpicService.cs` (~150 líneas) |
-
-Orden de lectura ya realizado:
-1. `epic-switcher-legacy-main/Services/EpicService.cs` — lógica esencial de switching
-2. `accshift-main/crates/accshift-core/src/platforms/` — diseño de la abstracción de plataforma
-3. `TcNo-Acc-Switcher-master/internal/steam/` — detalles Windows de Steam (AutoLoginUser en registro, kill de steamwebhelper)
-
-## 2. Lógica esencial del switching
+## 1. Lógica esencial del switching
 
 El patrón que siguen todos los switchers:
 
@@ -41,7 +26,7 @@ Por plataforma (implementado en GLAS.Core):
 - **Steam:** cuenta = SteamID64. Switch = matar `steam`/`steamwebhelper`/`GameOverlayUI` → escribir `config/loginusers.vdf` con `MostRecent=1`/`RememberPassword=1` → fijar `HKCU\Software\Valve\Steam\AutoLoginUser` → relanzar `steam.exe -silent`.
 - VDF parseado/escrito con un parser propio que preserva campos desconocidos y falla en vez de escribir un archivo corrupto.
 
-## 3. Arquitectura (implementada)
+## 2. Arquitectura (implementada)
 
 ```
 GLAS.slnx
@@ -70,14 +55,14 @@ Reglas de diseño (cumplidas):
 - Toda escritura del launcher pasa por `SwitchTransaction` (backup → escribir → rollback si algo falla) — verificado con tests de fallo inyectado.
 - Cada plataforma es un módulo independiente tras `IPlatform`.
 
-## 4. Fases
+## 3. Fases
 
 ### Fase 0 — Setup [COMPLETADA]
 - [x] Solución .NET 10 (LTS): GLAS.Core + GLAS.App + GLAS.Core.Tests (xUnit)
 
 ### Fase 1 — Core sin UI [COMPLETADA]
 - [x] `IPlatform` + `PlatformRegistry`
-- [x] `EpicPlatform` (patrón de `EpicService.cs`, con detección de activa por hash)
+- [x] `EpicPlatform` (con detección de activa por hash)
 - [x] `SteamPlatform` con parser/escritor VDF seguro
 - [x] Gestor de snapshots (guardar, listar, renombrar, borrar)
 - [x] Tests unitarios con directorios simulados
@@ -85,7 +70,7 @@ Reglas de diseño (cumplidas):
 ### Fase 1b — Motor genérico declarativo [COMPLETADA]
 - [x] `GenericPlatform` + `PlatformDefinition` (JSON): archivos, globs, directorios, valores de registro y campos JSON como objetivos de sesión
 - [x] Catálogo embebido `platforms.json` + override de usuario en `%APPDATA%\GLAS\platforms.json`
-- [x] Plataformas nuevas: **Riot Games, Ubisoft Connect, Escape from Tarkov, Battle.net, EA Desktop, GOG Galaxy, Discord, Roblox** (definiciones tomadas de TcNo/accshift)
+- [x] Plataformas nuevas: **Riot Games, Ubisoft Connect, Escape from Tarkov, Battle.net, EA Desktop, GOG Galaxy, Discord, Roblox** (definiciones del catálogo embebido)
 - [x] Tests del motor (capture/switch/rollback/add-new-login por cada tipo de objetivo)
 
 ### Fase 2 — Robustez y seguridad [COMPLETADA]
@@ -108,10 +93,10 @@ Reglas de diseño (cumplidas):
 - [x] Multi-idioma ES/EN (conmutable en ajustes)
 - [x] Publicación verificada: exe único framework-dependent (~600 KB) en `publish/`
 - [ ] Más plataformas: las de mayor riesgo quedan fuera del catálogo (Origin, Rockstar, PS Remote Play, Magic Arena — requieren resolución de carpeta de instalación o leveldb)
-- [ ] Atajos de escritorio por cuenta (referencia: `shortcuts` de TcNo)
+- [ ] Atajos de escritorio por cuenta
 - [ ] Auto-updater + instalador (NSIS/WiX)
 
-## 5. Riesgos y mitigaciones
+## 4. Riesgos y mitigaciones
 
 | Riesgo | Mitigación |
 |---|---|
@@ -120,14 +105,14 @@ Reglas de diseño (cumplidas):
 | Cuentas con datos sensibles en texto plano | Cifrado opcional con contraseña AES-256-GCM desde Ajustes |
 | Baneo por "comportamiento raro" del launcher | GLAS solo mueve archivos locales; no toca APIs ni inyecta nada |
 
-## 6. Definición de "hecho" por fase
+## 5. Definición de "hecho" por fase
 
 - **Fase 1:** cambiar entre dos cuentas Epic y dos de Steam desde un test del core, sin UI, en máquina simulada. ✓ (37 tests)
 - **Fase 2:** un switch interrumpido a propósito deja el launcher en su estado original. ✓ (tests de rollback)
 - **Fase 3:** un usuario no técnico cambia de cuenta en un clic desde la ventana principal. ✓ (UI implementada; falta validación manual por el usuario)
 - **Fase 4:** publicar un instalador y que otra persona lo use sin ayuda. (parcial: exe publicado; instalador pendiente)
 
-## 7. Pendiente / siguiente sesión
+## 6. Pendiente / siguiente sesión
 
 1. **Validación manual del usuario:** switch real contra Steam, Epic, GOG y Riot en el equipo del usuario (todas instaladas; Steam en `d:/program files (x86)/steam` vía registro, Epic en `C:\Program Files\Epic Games` (64-bit), GOG en `D:\Program Files\GOG Galaxy`, Riot en `D:/Riot Games`).
 2. Atajos de escritorio por cuenta.
@@ -158,4 +143,4 @@ Epic re-encripta el token `Data=` de `[RememberMe]` en cada arranque del launche
 
 ### Nota sobre las plataformas genéricas
 
-Las 8 plataformas del catálogo genérico (Riot, Ubisoft, Tarkov, Battle.net, EA Desktop, GOG Galaxy, Discord, Roblox) usan definiciones tomadas de los proyectos de referencia (TcNo/accshift), con el mismo motor transaccional y rollback que Steam/Epic. Están verificadas por tests con carpetas simuladas, **no contra instalaciones reales**: cada una debería probarse una vez con el launcher instalado antes de fiarse de ella al 100%. Si alguna falla, su entrada en `%APPDATA%\GLAS\platforms.json` se puede corregir sin recompilar.
+Las 8 plataformas del catálogo genérico (Riot, Ubisoft, Tarkov, Battle.net, EA Desktop, GOG Galaxy, Discord, Roblox) usan el mismo motor transaccional y rollback que Steam/Epic. Están verificadas por tests con carpetas simuladas, **no contra instalaciones reales**: cada una debería probarse una vez con el launcher instalado antes de fiarse de ella al 100%. Si alguna falla, su entrada en `%APPDATA%\GLAS\platforms.json` se puede corregir sin recompilar.

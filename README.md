@@ -21,7 +21,7 @@
 
 ## What is GLAS?
 
-GLAS is a free, open-source account switcher for Windows game launchers. It saves the login session of each account on your machine, so switching accounts is one click — no re-entering passwords, no 2FA prompts, no email codes. Inspired by [TcNo Account Switcher](https://github.com/TcNoc/TcNo-Acc-Switcher), AccShift and Epic Switcher.
+GLAS is a free, open-source account switcher for Windows game launchers. It saves the login session of each account on your machine, so switching accounts is one click — no re-entering passwords, no 2FA prompts, no email codes.
 
 Everything stays on your PC: GLAS has no servers, no accounts and no telemetry.
 
@@ -81,12 +81,6 @@ dotnet publish GLAS.App/GLAS.App.csproj -c Release -r win-x64 --self-contained f
 - [ ] Installer (NSIS/WiX) alongside the portable exe
 - [ ] More launchers: Origin, Rockstar, PS Remote Play, Magic Arena
 - [ ] Per-account desktop shortcuts
-
-## Acknowledgements
-
-- [TcNo Account Switcher](https://github.com/TcNoc/TcNo-Acc-Switcher) — reference for advanced features (tray, i18n, updater, safe VDF handling)
-- AccShift — reference for the clean core design (snapshots, process locking, encryption)
-- Epic Switcher (legacy) — reference for the Epic switching logic
 
 ## Contributing
 

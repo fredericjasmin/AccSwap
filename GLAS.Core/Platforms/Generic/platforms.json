@@ -1,5 +1,4 @@
 [
-  // Definitions follow the same mechanics as TcNo-Acc-Switcher's Platforms.json.
   // Path variables: %LocalAppData%, %AppData%, %ProgramData%, %ProgramFiles(x86)%, %ProgramFiles%.
   // Target types: File, Glob, Directory, Registry, JsonField.
   // Unique id kinds: FileHash, FileRegex, DirHash, RegistryValue, JsonField.
