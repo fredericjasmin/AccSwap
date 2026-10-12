@@ -159,12 +159,14 @@ public static class UpdateService
             return;
         }
 
+        bool changed = false;
         string old = exe + ".old";
         try
         {
             if (File.Exists(old))
             {
                 File.Delete(old);
+                changed = true;
             }
         }
         catch
@@ -173,9 +175,16 @@ public static class UpdateService
             return;
         }
 
-        string stableName = Path.Combine(Path.GetDirectoryName(exe)!, "GLAS.exe");
+        string stableName = Path.Combine(
+            Path.GetDirectoryName(exe)!,
+            "GLAS - Game Launcher Account Switcher.exe");
         if (exe.Equals(stableName, StringComparison.OrdinalIgnoreCase))
         {
+            if (changed)
+            {
+                RefreshShellIcons();
+            }
+
             return;
         }
 
@@ -183,15 +192,38 @@ public static class UpdateService
         {
             if (File.Exists(stableName))
             {
-                return; // do not clobber an unrelated GLAS.exe in the same folder
+                return; // do not clobber an unrelated file in the same folder
             }
 
             File.Move(exe, stableName);
             FollowAutostart(exe, stableName);
+            RefreshShellIcons();
         }
         catch
         {
             // Renaming is cosmetic: a failed rename must not break startup.
+        }
+    }
+
+    /// <summary>
+    /// Tells Explorer to reload file icons. Without this, an exe updated
+    /// in place keeps showing the previous version's icon from the shell
+    /// icon cache.
+    /// </summary>
+    [System.Runtime.InteropServices.DllImport("shell32.dll")]
+    private static extern void SHChangeNotify(int wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
+
+    private static void RefreshShellIcons()
+    {
+        const int SHCNE_ASSOCCHANGED = 0x08000000;
+        const uint SHCNF_IDLIST = 0x0000;
+        try
+        {
+            SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, IntPtr.Zero, IntPtr.Zero);
+        }
+        catch
+        {
+            // Purely cosmetic; never fail startup for it.
         }
     }
 

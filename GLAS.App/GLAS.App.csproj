@@ -16,7 +16,7 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>GLAS</AssemblyName>
     <TargetFramework>net10.0-windows</TargetFramework>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <ApplicationIcon>logo.ico</ApplicationIcon>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
