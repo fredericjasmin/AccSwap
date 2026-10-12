@@ -8,7 +8,7 @@ en GitHub. Tag con el mismo número que `<Version>` del csproj
 (p. ej. `v0.2.0`), con sufijo `-alpha` / `-beta` si es preliminar
 (p. ej. `v0.2.0-alpha`).
 
-Adjuntar siempre: `GLAS.App.exe` (generado con
+Adjuntar siempre: `GLAS-vX.Y.Z.exe` (generado con
 `dotnet publish GLAS.App/GLAS.App.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o publish`).
 
 ---

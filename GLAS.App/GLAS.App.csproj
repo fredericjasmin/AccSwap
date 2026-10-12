@@ -11,6 +11,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <AssemblyName>GLAS</AssemblyName>
     <TargetFramework>net10.0-windows</TargetFramework>
     <Version>0.1.0</Version>
     <Nullable>enable</Nullable>
