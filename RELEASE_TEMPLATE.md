@@ -28,6 +28,7 @@ Fecha: YYYY-MM-DD
 
 ### Notas
 - (Advertencias, migraciones, cosas conocidas que no se arreglaron.)
+- Mientras el exe no esté firmado: recordar el aviso de SmartScreen ("Más información -> Ejecutar de todas formas").
 
 ---
 
