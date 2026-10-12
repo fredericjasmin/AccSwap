@@ -13,7 +13,7 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>GLAS</AssemblyName>
     <TargetFramework>net10.0-windows</TargetFramework>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>    <ApplicationManifest>app.manifest</ApplicationManifest>
