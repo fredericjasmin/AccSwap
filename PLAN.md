@@ -131,9 +131,9 @@ Reglas de diseño (cumplidas):
 
 1. **Validación manual del usuario:** switch real contra Steam, Epic, GOG y Riot en el equipo del usuario (todas instaladas; Steam en `d:/program files (x86)/steam` vía registro, Epic en `C:\Program Files\Epic Games` (64-bit), GOG en `D:\Program Files\GOG Galaxy`, Riot en `D:/Riot Games`).
 2. Atajos de escritorio por cuenta.
-3. Auto-updater + instalador.
+3. Instalador (NSIS/WiX). La detección de actualizaciones vía GitHub Releases YA está: la app consulta `releases/latest` al arrancar y desde Ajustes; al publicar un tag `vX.Y.Z` mayor a la versión actual (`AppInfo.Version`) salta el aviso con enlace de descarga.
 4. Icono `.ico` real de marca (el actual se dibuja en runtime).
-5. Git: inicializar repositorio y primer commit (hoy no se versionó).
+5. ~~Git~~ hecho: repo en https://github.com/fredericjasmin/Game-Launcher-Account-Switcher (rama main, remoto origin).
 6. Plataformas con mecanismos pendientes: Origin (legacy), Rockstar, PS Remote Play, Magic Arena (necesitan detección de carpeta de instalación o lectura de leveldb).
 
 ### Detección de instalaciones (resuelto)

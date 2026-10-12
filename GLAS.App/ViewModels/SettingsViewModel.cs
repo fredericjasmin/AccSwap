@@ -164,32 +164,7 @@ public partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task CheckUpdatesAsync()
-    {
-        UpdateChecker.ReleaseInfo? release = await UpdateChecker.GetLatestReleaseAsync();
-        if (release is null)
-        {
-            UiDialogs.Info(Loc.Instance["Update.Title"], Loc.Instance["Update.Unavailable"]);
-            return;
-        }
-
-        if (UpdateChecker.IsNewer(release.Tag))
-        {
-            if (UiDialogs.Confirm(
-                    Loc.Instance["Update.Title"],
-                    string.Format(Loc.Instance["Update.Available"], release.Tag)))
-            {
-                System.Diagnostics.Process.Start(
-                    new System.Diagnostics.ProcessStartInfo(release.HtmlUrl) { UseShellExecute = true });
-            }
-        }
-        else
-        {
-            UiDialogs.Info(
-                Loc.Instance["Update.Title"],
-                string.Format(Loc.Instance["Update.UpToDate"], AppInfo.Version));
-        }
-    }
+    private Task CheckUpdatesAsync() => Services.UpdateService.CheckAsync(manual: true);
 
     [RelayCommand]
     private void Close() => _close();

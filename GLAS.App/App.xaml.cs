@@ -68,6 +68,8 @@ public partial class App : Application
         _tray = new TrayService();
         _tray.Initialize(main, window);
 
+        UpdateService.CleanupPreviousUpdate();
+
         if (services.Settings.StartMinimized)
         {
             window.Hide();
@@ -77,45 +79,8 @@ public partial class App : Application
             window.Show();
         }
 
-        _ = CheckForUpdatesAsync(notifyUpToDate: false);
-    }
-
-    /// <summary>
-    /// GitHub Releases update check. Silent failures: with no network or no
-    /// published release the user simply hears nothing.
-    /// </summary>
-    private static async Task CheckForUpdatesAsync(bool notifyUpToDate)
-    {
-        UpdateChecker.ReleaseInfo? release = await UpdateChecker.GetLatestReleaseAsync();
-        if (release is null)
-        {
-            if (notifyUpToDate)
-            {
-                UiDialogs.Info(
-                    Loc.Instance["Update.Title"],
-                    Loc.Instance["Update.Unavailable"]);
-            }
-
-            return;
-        }
-
-        if (UpdateChecker.IsNewer(release.Tag))
-        {
-            bool open = UiDialogs.Confirm(
-                Loc.Instance["Update.Title"],
-                string.Format(Loc.Instance["Update.Available"], release.Tag));
-            if (open)
-            {
-                System.Diagnostics.Process.Start(
-                    new System.Diagnostics.ProcessStartInfo(release.HtmlUrl) { UseShellExecute = true });
-            }
-        }
-        else if (notifyUpToDate)
-        {
-            UiDialogs.Info(
-                Loc.Instance["Update.Title"],
-                string.Format(Loc.Instance["Update.UpToDate"], AppInfo.Version));
-        }
+        // GitHub Releases check: silent unless a newer version exists.
+        _ = UpdateService.CheckAsync(manual: false);
     }
 
     protected override void OnExit(ExitEventArgs e)
