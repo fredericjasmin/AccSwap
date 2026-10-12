@@ -6,7 +6,17 @@ namespace GLAS.Core.Settings;
 public sealed class AppSettings
 {
     [JsonPropertyName("language")]
-    public string Language { get; set; } = "es";
+    public string Language { get; set; } = DetectSystemLanguage();
+
+    /// <summary>
+    /// First-run language: Spanish when the OS UI language is Spanish,
+    /// English for everything else.
+    /// </summary>
+    public static string DetectSystemLanguage() =>
+        System.Globalization.CultureInfo.CurrentUICulture
+            .TwoLetterISOLanguageName.StartsWith("es", StringComparison.OrdinalIgnoreCase)
+            ? "es"
+            : "en";
 
     [JsonPropertyName("startMinimized")]
     public bool StartMinimized { get; set; }
