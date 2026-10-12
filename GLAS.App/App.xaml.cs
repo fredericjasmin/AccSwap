@@ -1,5 +1,4 @@
 using System.IO;
-using MessageBox = System.Windows.MessageBox;
 using System.Threading;
 using System.Windows;
 using GLAS.App.Localization;
@@ -10,7 +9,10 @@ namespace GLAS.App;
 
 public partial class App : Application
 {
+    private const string ShowSignalName = "GLAS.ShowInstance";
+
     private static Mutex? _singleInstanceMutex;
+    private static EventWaitHandle? _showSignal;
     private TrayService? _tray;
 
     public static bool RealExitRequested { get; set; }
@@ -22,11 +24,10 @@ public partial class App : Application
         _singleInstanceMutex = new Mutex(initiallyOwned: true, "GLAS.SingleInstance", out bool createdNew);
         if (!createdNew)
         {
-            MessageBox.Show(
-                "GLAS is already running. Check the system tray.",
-                "GLAS",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            // A second launch shows the running instance's window instead of
+            // nagging the user about it.
+            using var signal = new EventWaitHandle(false, EventResetMode.AutoReset, ShowSignalName);
+            signal.Set();
             Shutdown();
             return;
         }
@@ -81,6 +82,41 @@ public partial class App : Application
 
         // GitHub Releases check: silent unless a newer version exists.
         _ = UpdateService.CheckAsync(manual: false);
+
+        StartShowSignalListener();
+    }
+
+    /// <summary>
+    /// Listens for a second launch: the new process sets the named signal
+    /// and dies; this instance brings its window to the front.
+    /// </summary>
+    private void StartShowSignalListener()
+    {
+        _showSignal = new EventWaitHandle(false, EventResetMode.AutoReset, ShowSignalName);
+        var listener = new Thread(WaitForShowSignal)
+        {
+            IsBackground = true,
+            Name = "GLAS.ShowSignalListener",
+        };
+        listener.Start();
+    }
+
+    private void WaitForShowSignal()
+    {
+        while (_showSignal is { } signal && signal.WaitOne())
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                if (MainWindow is not { } window)
+                {
+                    return;
+                }
+
+                window.Show();
+                window.WindowState = WindowState.Normal;
+                window.Activate();
+            });
+        }
     }
 
     protected override void OnExit(ExitEventArgs e)

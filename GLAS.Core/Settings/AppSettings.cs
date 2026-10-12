@@ -22,7 +22,7 @@ public sealed class AppSettings
     public bool StartMinimized { get; set; }
 
     [JsonPropertyName("closeToTray")]
-    public bool CloseToTray { get; set; } = true;
+    public bool CloseToTray { get; set; }
 
     [JsonPropertyName("autoStart")]
     public bool AutoStart { get; set; }
