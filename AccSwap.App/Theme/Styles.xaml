@@ -184,6 +184,20 @@
                                     StrokeThickness="1.5" />
                             </Grid>
                         </Border>
+                        <!-- Opens the dropdown on click: without this toggle
+                             the template has no way to set IsDropDownOpen. -->
+                        <ToggleButton
+                            Grid.ColumnSpan="2"
+                            Background="Transparent"
+                            ClickMode="Press"
+                            Focusable="False"
+                            IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Rectangle Fill="Transparent" />
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
                         <Popup
                             x:Name="PART_Popup"
                             Margin="0,7,0,0"
