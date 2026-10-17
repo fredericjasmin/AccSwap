@@ -16,9 +16,6 @@ public static class AutoStartService
 
     private const string ValueName = "AccSwap";
 
-    /// <summary>The value name used before the AccSwap rename.</summary>
-    private const string LegacyValueName = "GLAS";
-
     public static bool IsEnabled(IRegistryService registry) =>
         registry.GetStringValue(RegistryHive.CurrentUser, RunKey, ValueName) is not null;
 
@@ -36,8 +33,6 @@ public static class AutoStartService
         {
             registry.DeleteValue(RegistryHive.CurrentUser, RunKey, ValueName);
         }
-
-        RemoveLegacyEntry(registry);
     }
 
     /// <summary>
@@ -49,24 +44,12 @@ public static class AutoStartService
     /// </summary>
     public static void RepairEntry(IRegistryService registry)
     {
-        RemoveLegacyEntry(registry);
-
         string wanted = $"\"{ResolveExePath()}\"";
         string? current = registry.GetStringValue(RegistryHive.CurrentUser, RunKey, ValueName);
         if (!string.Equals(current, wanted, StringComparison.OrdinalIgnoreCase))
         {
             registry.SetStringValue(RegistryHive.CurrentUser, RunKey, ValueName, wanted);
         }
-    }
-
-    /// <summary>
-    /// Deletes the pre-rename Run entry so Windows cannot launch both the
-    /// legacy and the AccSwap entries at logon.
-    /// </summary>
-    private static void RemoveLegacyEntry(IRegistryService registry)
-    {
-        registry.DeleteValue(RegistryHive.CurrentUser, RunKey, LegacyValueName);
-        registry.DeleteValue(RegistryHive.CurrentUser, StartupApprovedKey, LegacyValueName);
     }
 
     /// <summary>

@@ -23,7 +23,7 @@ public class AccountPackageTests : IDisposable
             Meta("acc2", "userB"),
             new Dictionary<string, byte[]> { ["session.ini"] = Encoding.UTF8.GetBytes("tokenBBB") });
 
-        string package = _work.Combine("backup.glas");
+        string package = _work.Combine("backup.accswap");
         await AccountPackage.ExportAsync(source, ["epic"], package, password: null);
 
         AccountPackage.ImportResult imported = await AccountPackage.ImportAsync(target, package, password: null);
@@ -46,7 +46,7 @@ public class AccountPackageTests : IDisposable
             Meta("acc1", "userA"),
             new Dictionary<string, byte[]> { ["session.ini"] = Encoding.UTF8.GetBytes("tokenAAA") });
 
-        string package = _work.Combine("backup.glas");
+        string package = _work.Combine("backup.accswap");
         await AccountPackage.ExportAsync(source, ["epic"], package, password: "secreta");
 
         // Package content is not plain text.
@@ -68,7 +68,7 @@ public class AccountPackageTests : IDisposable
             Meta("acc1", "userA"),
             new Dictionary<string, byte[]> { ["session.ini"] = Encoding.UTF8.GetBytes("tokenAAA") });
 
-        string package = _work.Combine("backup.glas");
+        string package = _work.Combine("backup.accswap");
         await AccountPackage.ExportAsync(source, ["epic"], package, password: "correcta");
 
         var target = new SnapshotStore(_work.Combine("store2"));
@@ -88,7 +88,7 @@ public class AccountPackageTests : IDisposable
             Meta("acc2", "userB"),
             new Dictionary<string, byte[]> { ["session.ini"] = Encoding.UTF8.GetBytes("tokenBBB") });
 
-        string package = _work.Combine("backup.glas");
+        string package = _work.Combine("backup.accswap");
         await AccountPackage.ExportAsync(source, ["epic"], package, password: null);
 
         // Target PC already has a local account and an older copy of acc1.
@@ -123,7 +123,7 @@ public class AccountPackageTests : IDisposable
             Meta("acc1", "userA"),
             new Dictionary<string, byte[]> { ["session.ini"] = Encoding.UTF8.GetBytes("tokenAAA") });
 
-        string package = _work.Combine("backup.glas");
+        string package = _work.Combine("backup.accswap");
         await AccountPackage.ExportAsync(source, ["epic"], package, password: null);
 
         var target = new SnapshotStore(_work.Combine("store2"));

@@ -393,8 +393,8 @@ public partial class MainViewModel : ObservableObject
     {
         string? path = UiDialogs.AskSaveFile(
             Loc.Instance["Export.Title"],
-            "Paquete AccSwap (*.glas)|*.glas",
-            "glas-backup.glas");
+            "Paquete AccSwap (*.accswap)|*.accswap",
+            "accswap-backup.accswap");
         if (path is null)
         {
             return;
@@ -421,7 +421,7 @@ public partial class MainViewModel : ObservableObject
     {
         string? path = UiDialogs.AskOpenFile(
             Loc.Instance["Import.Title"],
-            "Paquete AccSwap (*.glas)|*.glas");
+            "Paquete AccSwap (*.accswap)|*.accswap");
         if (path is null)
         {
             return;

@@ -7,7 +7,7 @@ namespace AccSwap.Core.Files;
 /// </summary>
 public static class AtomicFile
 {
-    private const string TempSuffix = ".glas-tmp";
+    private const string TempSuffix = ".accswap-tmp";
 
     public static void WriteAllBytes(string path, byte[] content)
     {

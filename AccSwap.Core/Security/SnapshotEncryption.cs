@@ -13,7 +13,7 @@ public interface IFileProtector
 
 public static class SnapshotEncryption
 {
-    private const string Magic = "GLASENC1";
+    private const string Magic = "ACCENC1";
 
     public static bool IsEncrypted(byte[] data)
     {

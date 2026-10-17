@@ -18,32 +18,16 @@ namespace AccSwap.App.Services;
 /// </summary>
 public sealed class AppServices
 {
-    public const string ProtectionFileName = "protection.glasp";
-    private const string ProtectionToken = "glas-protection-check";
+    public const string ProtectionFileName = "protection.accswap";
+    private const string ProtectionToken = "accswap-protection-check";
 
     public static AppServices Instance { get; } = new();
 
     private AppServices()
     {
-        string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        RootDir = Path.Combine(appData, "AccSwap");
-
-        // One-time migration: data written before the AccSwap rename.
-        string legacyDir = Path.Combine(appData, "GLAS");
-        if (Directory.Exists(legacyDir) && !Directory.Exists(RootDir))
-        {
-            try
-            {
-                Directory.Move(legacyDir, RootDir);
-            }
-            catch (IOException)
-            {
-                // Move failed (locked file, partial copy): fall back to the
-                // legacy folder so no data is lost, and keep using it.
-                RootDir = legacyDir;
-            }
-        }
-
+        RootDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "AccSwap");
         Directory.CreateDirectory(RootDir);
 
         SettingsStore = AppSettingsStore.CreateDefault(RootDir);

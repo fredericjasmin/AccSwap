@@ -7,7 +7,7 @@ namespace AccSwap.Core.ExportImport;
 
 /// <summary>
 /// Packs every saved account (metadata + payload files) into a single
-/// .glas file (a zip) for migrating to another PC. Entries are optionally
+/// .accswap file (a zip) for migrating to another PC. Entries are optionally
 /// encrypted with a password, independent of the at-rest protection.
 /// </summary>
 public static class AccountPackage

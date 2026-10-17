@@ -153,7 +153,7 @@ public class SnapshotStoreTests : IDisposable
         AtomicFile.WriteAllText(path, "uno");
         AtomicFile.WriteAllText(path, "dos");
         Assert.Equal("dos", File.ReadAllText(path));
-        Assert.False(File.Exists(path + ".glas-tmp"));
+        Assert.False(File.Exists(path + ".accswap-tmp"));
     }
 
     private static AccountMeta Meta(string id) => new()

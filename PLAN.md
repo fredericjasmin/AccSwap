@@ -37,7 +37,7 @@ AccSwap.slnx
 │   ├── Snapshots/ (SnapshotStore, SwitchTransaction)
 │   ├── Files/AtomicFile.cs         # escritura atómica (temp + File.Replace)
 │   ├── Security/                   # AES-GCM + PBKDF2 (protección opcional)
-│   ├── ExportImport/AccountPackage # paquete .glas (zip) con cifrado opcional
+│   ├── ExportImport/AccountPackage # paquete .accswap (zip) con cifrado opcional
 │   ├── RegistryAccess/, Processes/ # abstracciones inyectables para tests
 │   └── Settings/AppSettings.cs
 ├── AccSwap.App/                       # WPF (MVVM, CommunityToolkit)
@@ -77,7 +77,7 @@ Reglas de diseño (cumplidas):
 - [x] Switch transaccional con rollback de archivos y registro (tests con fallo inyectado)
 - [x] Escritura atómica (temporal + `File.Replace`)
 - [x] Cifrado opcional de snapshots con contraseña (AES-256-GCM + PBKDF2-SHA256 100k)
-- [x] Export/import de todas las cuentas (`.glas`, cifrado opcional)
+- [x] Export/import de todas las cuentas (`.accswap`, cifrado opcional)
 
 ### Fase 3 — UI [COMPLETADA]
 - [x] Ventana principal: tarjetas de cuenta con iniciales, plataforma y pill "Activa"
