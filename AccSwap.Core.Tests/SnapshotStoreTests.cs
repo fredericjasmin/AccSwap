@@ -110,7 +110,7 @@ public class SnapshotStoreTests : IDisposable
     [Fact]
     public async Task SwitchTransaction_Failure_RestoresRegistryValue_AndRemovesNewValues()
     {
-        string key = @"Software\GlasTest";
+        string key = @"Software\AccSwapTest";
         _registry.SetStringValue(RegistryHive.CurrentUser, key, "AutoLoginUser", "old");
 
         string fileTarget = _work.Combine("created.ini");

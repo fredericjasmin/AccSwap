@@ -139,7 +139,7 @@ public sealed partial class EpicPlatform : IPlatform
         };
 
         Report("Saving account...");
-        string tempCopy = Path.Combine(Path.GetTempPath(), $"glas_epic_{accountId}.ini");
+        string tempCopy = Path.Combine(Path.GetTempPath(), $"accswap_epic_{accountId}.ini");
         await File.WriteAllBytesAsync(tempCopy, liveIni, ct);
         try
         {

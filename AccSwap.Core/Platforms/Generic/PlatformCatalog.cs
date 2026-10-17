@@ -23,11 +23,11 @@ public static class PlatformCatalog
         Converters = { new JsonStringEnumConverter() },
     };
 
-    public static List<PlatformDefinition> Load(string glasRootDir)
+    public static List<PlatformDefinition> Load(string rootDir)
     {
         List<PlatformDefinition> platforms = LoadEmbedded();
 
-        string userFile = Path.Combine(glasRootDir, UserFileName);
+        string userFile = Path.Combine(rootDir, UserFileName);
         if (File.Exists(userFile))
         {
             try

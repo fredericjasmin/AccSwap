@@ -36,7 +36,7 @@ public class GenericPlatformTests : IDisposable
             new LoginTarget
             {
                 Type = LoginTargetKind.Registry,
-                KeyPath = @"Software\GlasFake",
+                KeyPath = @"Software\AccSwapFake",
                 ValueName = "user",
             },
             new LoginTarget
@@ -62,7 +62,7 @@ public class GenericPlatformTests : IDisposable
         File.WriteAllText(_work.Combine("cache", "data_002"), "A2");
         Directory.CreateDirectory(_work.Combine("sessions", "userA"));
         File.WriteAllText(_work.Combine("sessions", "userA", "token.txt"), "tokenA");
-        _registry.SetStringValue(RegistryHive.CurrentUser, @"Software\GlasFake", "user", "userA");
+        _registry.SetStringValue(RegistryHive.CurrentUser, @"Software\AccSwapFake", "user", "userA");
         File.WriteAllText(
             _work.Combine("client.config.json"),
             """{ "Client": { "SavedAccountNames": "a@mail.com", "Other": 42 } }""");
@@ -76,7 +76,7 @@ public class GenericPlatformTests : IDisposable
         File.WriteAllText(_work.Combine("cache", "data_003"), "B3");
         Directory.CreateDirectory(_work.Combine("sessions", "userB"));
         File.WriteAllText(_work.Combine("sessions", "userB", "token.txt"), "tokenB");
-        _registry.SetStringValue(RegistryHive.CurrentUser, @"Software\GlasFake", "user", "userB");
+        _registry.SetStringValue(RegistryHive.CurrentUser, @"Software\AccSwapFake", "user", "userB");
         File.WriteAllText(
             _work.Combine("client.config.json"),
             """{ "Client": { "SavedAccountNames": "b@mail.com", "Other": 42 } }""");
@@ -191,7 +191,7 @@ public class GenericPlatformTests : IDisposable
 
         Assert.Equal(
             "userA",
-            _registry.GetStringValue(RegistryHive.CurrentUser, @"Software\GlasFake", "user"));
+            _registry.GetStringValue(RegistryHive.CurrentUser, @"Software\AccSwapFake", "user"));
 
         string config = await File.ReadAllTextAsync(_work.Combine("client.config.json"));
         Assert.Contains("a@mail.com", config);
@@ -220,7 +220,7 @@ public class GenericPlatformTests : IDisposable
         Assert.Equal("email=b@mail.com\ntheme=light", await File.ReadAllTextAsync(_work.Combine("settings.yml")));
         Assert.Equal(
             "userB",
-            _registry.GetStringValue(RegistryHive.CurrentUser, @"Software\GlasFake", "user"));
+            _registry.GetStringValue(RegistryHive.CurrentUser, @"Software\AccSwapFake", "user"));
         string config = await File.ReadAllTextAsync(_work.Combine("client.config.json"));
         Assert.Contains("b@mail.com", config);
     }
@@ -237,7 +237,7 @@ public class GenericPlatformTests : IDisposable
         Assert.False(File.Exists(_work.Combine("settings.yml")));
         Assert.False(File.Exists(_work.Combine("cache", "data_001")));
         Assert.False(File.Exists(_work.Combine("sessions", "userA", "token.txt")));
-        Assert.Null(_registry.GetStringValue(RegistryHive.CurrentUser, @"Software\GlasFake", "user"));
+        Assert.Null(_registry.GetStringValue(RegistryHive.CurrentUser, @"Software\AccSwapFake", "user"));
         string config = await File.ReadAllTextAsync(_work.Combine("client.config.json"));
         Assert.Contains("\"SavedAccountNames\": \"\"", config);
         Assert.Contains($"start:{Path.GetFileName(_exePath)}:", _processes.Log[1]);

@@ -65,7 +65,7 @@ public sealed class InMemoryRegistryService : IRegistryService
 
 public sealed class TempDir : IDisposable
 {
-    public string Path { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"glas_test_{Guid.NewGuid():N}");
+    public string Path { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"accswap_test_{Guid.NewGuid():N}");
 
     public TempDir()
     {
