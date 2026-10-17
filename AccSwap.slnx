@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AccSwap.App/AccSwap.App.csproj" />
+  <Project Path="AccSwap.Core.Tests/AccSwap.Core.Tests.csproj" />
+  <Project Path="AccSwap.Core/AccSwap.Core.csproj" />
+</Solution>

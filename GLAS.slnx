@@ -1,5 +1,0 @@
-<Solution>
-  <Project Path="GLAS.App/GLAS.App.csproj" />
-  <Project Path="GLAS.Core.Tests/GLAS.Core.Tests.csproj" />
-  <Project Path="GLAS.Core/GLAS.Core.csproj" />
-</Solution>

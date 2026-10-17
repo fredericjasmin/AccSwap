@@ -1,0 +1,113 @@
+<Window
+    x:Class="AccSwap.App.SettingsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="clr-namespace:AccSwap.App.Localization"
+    xmlns:vm="clr-namespace:AccSwap.App.ViewModels"
+    Title="{Binding [Settings.Title], Source={x:Static loc:Loc.Instance}}"
+    Width="480"
+    Height="620"
+    MinHeight="360"
+    WindowStartupLocation="CenterOwner"
+    ShowInTaskbar="False"
+    Background="{StaticResource WindowBackground}">
+
+    <Window.Resources>
+        <DataTemplate x:Key="LanguageItem" DataType="{x:Type vm:SettingsViewModel+LanguageOption}">
+            <TextBlock Text="{Binding Label}" />
+        </DataTemplate>
+        <DataTemplate x:Key="LauncherPathTemplate" DataType="{x:Type vm:LauncherPathRow}">
+            <StackPanel Margin="0,10,0,0">
+                <TextBlock FontSize="13" FontWeight="Medium" Text="{Binding Name}" />
+                <TextBox
+                    Margin="0,6,0,0"
+                    Text="{Binding OverridePath, UpdateSourceTrigger=PropertyChanged, Delay=400}"
+                    ToolTip="{Binding [Settings.PathOverrideHint], Source={x:Static loc:Loc.Instance}}" />
+                <TextBlock
+                    Margin="0,4,0,0"
+                    FontSize="11"
+                    Foreground="{StaticResource TextSecondary}"
+                    Text="{Binding DetectedText}"
+                    TextTrimming="CharacterEllipsis"
+                    ToolTip="{Binding DetectedText}" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="28,20,28,24" MaxWidth="410">
+        <TextBlock FontSize="17" FontWeight="SemiBold" Text="{Binding [Settings.Title], Source={x:Static loc:Loc.Instance}}" />
+
+        <TextBlock
+            Margin="0,18,0,4"
+            FontSize="13"
+            Text="{Binding [Settings.Language], Source={x:Static loc:Loc.Instance}}" />
+        <ComboBox
+            ItemTemplate="{StaticResource LanguageItem}"
+            ItemsSource="{Binding Languages}"
+            SelectedValuePath="Code"
+            SelectedValue="{Binding Language}" />
+
+        <CheckBox
+            Content="{Binding [Settings.StartMinimized], Source={x:Static loc:Loc.Instance}}"
+            IsChecked="{Binding StartMinimized}"
+            Style="{StaticResource FormCheckBox}" />
+        <CheckBox
+            Content="{Binding [Settings.CloseToTray], Source={x:Static loc:Loc.Instance}}"
+            IsChecked="{Binding CloseToTray}"
+            Style="{StaticResource FormCheckBox}" />
+        <CheckBox
+            Content="{Binding [Settings.AutoStart], Source={x:Static loc:Loc.Instance}}"
+            IsChecked="{Binding AutoStart}"
+            Style="{StaticResource FormCheckBox}" />
+
+        <TextBlock
+            Margin="0,18,0,4"
+            FontSize="13"
+            Text="{Binding [Settings.SteamArgs], Source={x:Static loc:Loc.Instance}}" />
+        <TextBox Text="{Binding SteamArguments, UpdateSourceTrigger=PropertyChanged}" />
+
+        <CheckBox
+            Margin="0,18,0,0"
+            Content="{Binding [Settings.Protect], Source={x:Static loc:Loc.Instance}}"
+            IsChecked="{Binding ProtectSnapshots}"
+            Style="{StaticResource FormCheckBox}" />
+        <TextBlock
+            Margin="0,4,0,0"
+            FontSize="11"
+            Foreground="{StaticResource TextSecondary}"
+            Text="{Binding [Settings.ProtectHint], Source={x:Static loc:Loc.Instance}}"
+            TextWrapping="Wrap" />
+
+        <TextBlock
+            Margin="0,22,0,0"
+            FontSize="15"
+            FontWeight="SemiBold"
+            Text="{Binding [Settings.LauncherPaths], Source={x:Static loc:Loc.Instance}}" />
+        <TextBlock
+            Margin="0,2,0,0"
+            FontSize="11"
+            Foreground="{StaticResource TextSecondary}"
+            Text="{Binding [Settings.PathOverrideHint], Source={x:Static loc:Loc.Instance}}"
+            TextWrapping="Wrap" />
+        <ItemsControl
+            Margin="0,6,0,0"
+            ItemTemplate="{StaticResource LauncherPathTemplate}"
+            ItemsSource="{Binding LauncherPaths}" />
+
+        <Button
+            Margin="0,24,0,0"
+            HorizontalAlignment="Left"
+            Command="{Binding CheckUpdatesCommand}"
+            Content="{Binding [Settings.CheckUpdates], Source={x:Static loc:Loc.Instance}}"
+            Style="{StaticResource GhostButton}" />
+
+        <Button
+            Margin="0,10,0,0"
+            HorizontalAlignment="Left"
+            Command="{Binding CloseCommand}"
+            Content="{Binding [Common.Close], Source={x:Static loc:Loc.Instance}}"
+            Style="{StaticResource PrimaryButton}" />
+        </StackPanel>
+    </ScrollViewer>
+</Window>

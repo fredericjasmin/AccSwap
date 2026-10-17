@@ -1,8 +1,8 @@
-# GLAS — Game Launcher Account Switcher
+# AccSwap
 
 Plan de desarrollo para un switcher de cuentas de gaming para Windows, con objetivo de máxima robustez y seguridad.
 
-- **Nombre:** GLAS (Game Launcher Account Switcher)
+- **Nombre:** AccSwap
 - **Stack:** C# + .NET 10 (LTS) + WPF (patrón MVVM)
 - **Plataforma objetivo:** Windows 10/11
 - **Alcance v0.1:** Steam + Epic Games Launcher
@@ -20,7 +20,7 @@ detectar instalación -> listar cuentas guardadas -> snapshot de sesión actual
 -> cerrar proceso del launcher -> restaurar snapshot elegido -> relanzar
 ```
 
-Por plataforma (implementado en GLAS.Core):
+Por plataforma (implementado en AccSwap.Core):
 
 - **Epic:** una cuenta = copia de `%LOCALAPPDATA%\EpicGamesLauncher\Saved\Config\Windows\GameUserSettings.ini`. Switch = matar `EpicGamesLauncher.exe` → escribir el ini guardado → relanzar. Cuenta activa detectada por hash del token `Data=` (tolera que Epic reescriba otros ajustes del ini).
 - **Steam:** cuenta = SteamID64. Switch = matar `steam`/`steamwebhelper`/`GameOverlayUI` → escribir `config/loginusers.vdf` con `MostRecent=1`/`RememberPassword=1` → fijar `HKCU\Software\Valve\Steam\AutoLoginUser` → relanzar `steam.exe -silent`.
@@ -29,8 +29,8 @@ Por plataforma (implementado en GLAS.Core):
 ## 2. Arquitectura (implementada)
 
 ```
-GLAS.slnx
-├── GLAS.Core/                      # motor, sin dependencias de UI (net10.0-windows)
+AccSwap.slnx
+├── AccSwap.Core/                      # motor, sin dependencias de UI (net10.0-windows)
 │   ├── Account.cs, Platforms/      # IPlatform, PlatformRegistry
 │   ├── Steam/ (Vdf/, LoginUsersFile, SteamPlatform, SteamPaths)
 │   ├── Epic/ (EpicPlatform, EpicPaths)
@@ -40,25 +40,25 @@ GLAS.slnx
 │   ├── ExportImport/AccountPackage # paquete .glas (zip) con cifrado opcional
 │   ├── RegistryAccess/, Processes/ # abstracciones inyectables para tests
 │   └── Settings/AppSettings.cs
-├── GLAS.App/                       # WPF (MVVM, CommunityToolkit)
+├── AccSwap.App/                       # WPF (MVVM, CommunityToolkit)
 │   ├── ViewModels/ (Main, AddAccount, Settings)
 │   ├── Views: MainWindow, AddAccountWindow, SettingsWindow, PasswordWindow
 │   ├── Services/ (AppServices, TrayService, HotkeyService, AutoStartService,
 │   │             AppIcon, UiDialogs)
 │   ├── Localization/Loc.cs         # ES/EN
 │   └── Theme/Styles.xaml           # tema oscuro
-└── GLAS.Core.Tests/                # 37 tests xUnit con carpetas simuladas
+└── AccSwap.Core.Tests/                # 37 tests xUnit con carpetas simuladas
 ```
 
 Reglas de diseño (cumplidas):
-- `GLAS.Core` nunca toca la instalación real en los tests: rutas, registro y procesos inyectados.
+- `AccSwap.Core` nunca toca la instalación real en los tests: rutas, registro y procesos inyectados.
 - Toda escritura del launcher pasa por `SwitchTransaction` (backup → escribir → rollback si algo falla) — verificado con tests de fallo inyectado.
 - Cada plataforma es un módulo independiente tras `IPlatform`.
 
 ## 3. Fases
 
 ### Fase 0 — Setup [COMPLETADA]
-- [x] Solución .NET 10 (LTS): GLAS.Core + GLAS.App + GLAS.Core.Tests (xUnit)
+- [x] Solución .NET 10 (LTS): AccSwap.Core + AccSwap.App + AccSwap.Core.Tests (xUnit)
 
 ### Fase 1 — Core sin UI [COMPLETADA]
 - [x] `IPlatform` + `PlatformRegistry`
@@ -69,7 +69,7 @@ Reglas de diseño (cumplidas):
 
 ### Fase 1b — Motor genérico declarativo [COMPLETADA]
 - [x] `GenericPlatform` + `PlatformDefinition` (JSON): archivos, globs, directorios, valores de registro y campos JSON como objetivos de sesión
-- [x] Catálogo embebido `platforms.json` + override de usuario en `%APPDATA%\GLAS\platforms.json`
+- [x] Catálogo embebido `platforms.json` + override de usuario en `%APPDATA%\AccSwap\platforms.json`
 - [x] Plataformas nuevas: **Riot Games, Ubisoft Connect, Escape from Tarkov, Battle.net, EA Desktop, GOG Galaxy, Discord, Roblox** (definiciones del catálogo embebido)
 - [x] Tests del motor (capture/switch/rollback/add-new-login por cada tipo de objetivo)
 
@@ -103,7 +103,7 @@ Reglas de diseño (cumplidas):
 | Un launcher actualiza su formato de sesión y rompe el switch | Snapshots inmutables + tests de regresión por formato; logging claro del error |
 | Corromper archivos del launcher a mitad de escritura | Escritura atómica (temporal + `File.Replace`) y backup previo obligatorio |
 | Cuentas con datos sensibles en texto plano | Cifrado opcional con contraseña AES-256-GCM desde Ajustes |
-| Baneo por "comportamiento raro" del launcher | GLAS solo mueve archivos locales; no toca APIs ni inyecta nada |
+| Baneo por "comportamiento raro" del launcher | AccSwap solo mueve archivos locales; no toca APIs ni inyecta nada |
 
 ## 5. Definición de "hecho" por fase
 
@@ -118,7 +118,7 @@ Reglas de diseño (cumplidas):
 2. Atajos de escritorio por cuenta.
 3. Instalador (NSIS/WiX). La detección de actualizaciones vía GitHub Releases YA está: la app consulta `releases/latest` al arrancar y desde Ajustes; al publicar un tag `vX.Y.Z` mayor a la versión actual (`AppInfo.Version`) salta el aviso con enlace de descarga.
 4. Icono `.ico` real de marca (el actual se dibuja en runtime).
-5. ~~Git~~ hecho: repo en https://github.com/fredericjasmin/Game-Launcher-Account-Switcher (rama main, remoto origin).
+5. ~~Git~~ hecho: repo en https://github.com/fredericjasmin/AccSwap (rama main, remoto origin).
 6. Plataformas con mecanismos pendientes: Origin (legacy), Rockstar, PS Remote Play, Magic Arena (necesitan detección de carpeta de instalación o lectura de leveldb).
 
 ### Detección de instalaciones (resuelto)
@@ -127,7 +127,7 @@ El orden de detección de cada launcher es: **ruta manual de Ajustes → rutas e
 
 ### Nota sobre Steam y `MostRecent`
 
-Steam solo escribe `MostRecent` en `loginusers.vdf` cuando hay más de una cuenta recordada. GLAS resuelve la cuenta activa con la cadena `MostRecent → AutoLogin → RememberPassword → única entrada`, así que guardar sesión funciona con una sola cuenta (el error reportado venía de un VDF sin `MostRecent`).
+Steam solo escribe `MostRecent` en `loginusers.vdf` cuando hay más de una cuenta recordada. AccSwap resuelve la cuenta activa con la cadena `MostRecent → AutoLogin → RememberPassword → única entrada`, así que guardar sesión funciona con una sola cuenta (el error reportado venía de un VDF sin `MostRecent`).
 
 ### Archivos bloqueados durante la captura (resuelto)
 
@@ -139,8 +139,8 @@ En esta instalación el `GameUserSettings.ini` (con el token `Data=` de sesión)
 
 ### Detección de la cuenta activa de Epic (token rotativo)
 
-Epic re-encripta el token `Data=` de `[RememberMe]` en cada arranque del launcher, así que comparar hashes del token nunca detecta la activa. En su lugar GLAS compara los GUIDs de las secciones del ini (`[<32hex>_General]`...), que son estables por cuenta: se extraen del ini guardado de cada cuenta (funciona con cuentas capturadas antes del cambio) y se comparan con los del ini en vivo. La re-captura tras una rotación del token actualiza la cuenta en vez de duplicarla (dedup por GUIDs, con el hash del token como fallback).
+Epic re-encripta el token `Data=` de `[RememberMe]` en cada arranque del launcher, así que comparar hashes del token nunca detecta la activa. En su lugar AccSwap compara los GUIDs de las secciones del ini (`[<32hex>_General]`...), que son estables por cuenta: se extraen del ini guardado de cada cuenta (funciona con cuentas capturadas antes del cambio) y se comparan con los del ini en vivo. La re-captura tras una rotación del token actualiza la cuenta en vez de duplicarla (dedup por GUIDs, con el hash del token como fallback).
 
 ### Nota sobre las plataformas genéricas
 
-Las 8 plataformas del catálogo genérico (Riot, Ubisoft, Tarkov, Battle.net, EA Desktop, GOG Galaxy, Discord, Roblox) usan el mismo motor transaccional y rollback que Steam/Epic. Están verificadas por tests con carpetas simuladas, **no contra instalaciones reales**: cada una debería probarse una vez con el launcher instalado antes de fiarse de ella al 100%. Si alguna falla, su entrada en `%APPDATA%\GLAS\platforms.json` se puede corregir sin recompilar.
+Las 8 plataformas del catálogo genérico (Riot, Ubisoft, Tarkov, Battle.net, EA Desktop, GOG Galaxy, Discord, Roblox) usan el mismo motor transaccional y rollback que Steam/Epic. Están verificadas por tests con carpetas simuladas, **no contra instalaciones reales**: cada una debería probarse una vez con el launcher instalado antes de fiarse de ella al 100%. Si alguna falla, su entrada en `%APPDATA%\AccSwap\platforms.json` se puede corregir sin recompilar.

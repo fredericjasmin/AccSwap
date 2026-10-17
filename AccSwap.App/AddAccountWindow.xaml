@@ -1,0 +1,107 @@
+<Window
+    x:Class="AccSwap.App.AddAccountWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="clr-namespace:AccSwap.App.Localization"
+    Title="{Binding Header}"
+    Width="480"
+    SizeToContent="Height"
+    WindowStartupLocation="CenterOwner"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    Background="{StaticResource WindowBackground}">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+
+    <StackPanel Margin="28" MaxWidth="430">
+
+        <!-- Platform header: the flow belongs to the platform being viewed -->
+        <StackPanel Orientation="Horizontal">
+            <Border
+                Width="30"
+                Height="30"
+                VerticalAlignment="Center"
+                Background="{Binding Accent}"
+                CornerRadius="15">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="13"
+                    FontWeight="Bold"
+                    Foreground="#10131A"
+                    Text="{Binding Glyph}" />
+            </Border>
+            <TextBlock
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                FontSize="17"
+                FontWeight="SemiBold"
+                Text="{Binding Header}" />
+        </StackPanel>
+
+        <!-- Step 1: prepare the launcher -->
+        <StackPanel Margin="0,18,0,0" Visibility="{Binding StepIsChoose, Converter={StaticResource BoolToVis}}">
+            <TextBlock
+                FontSize="14"
+                Foreground="{StaticResource TextPrimary}"
+                Text="{Binding [AddAccount.Step1], Source={x:Static loc:Loc.Instance}}"
+                TextWrapping="Wrap" />
+
+            <Button
+                Margin="0,22,0,0"
+                HorizontalAlignment="Left"
+                Command="{Binding PrepareCommand}"
+                Content="{Binding [AddAccount.Prepare], Source={x:Static loc:Loc.Instance}}"
+                Style="{StaticResource PrimaryButton}" />
+        </StackPanel>
+
+        <!-- Step 2: waiting for the user to log in with the new account -->
+        <StackPanel Margin="0,18,0,0" Visibility="{Binding StepIsWaiting, Converter={StaticResource BoolToVis}}">
+            <TextBlock
+                FontSize="14"
+                Text="{Binding [AddAccount.Step2], Source={x:Static loc:Loc.Instance}}"
+                TextWrapping="Wrap" />
+            <Button
+                Margin="0,22,0,0"
+                HorizontalAlignment="Left"
+                Command="{Binding DoneLoggingInCommand}"
+                Content="{Binding [AddAccount.LoggedIn], Source={x:Static loc:Loc.Instance}}"
+                Style="{StaticResource PrimaryButton}" />
+        </StackPanel>
+
+        <!-- Step 3: name it -->
+        <StackPanel Margin="0,18,0,0" Visibility="{Binding StepIsName, Converter={StaticResource BoolToVis}}">
+            <TextBlock FontSize="13" Text="{Binding [AddAccount.NameLabel], Source={x:Static loc:Loc.Instance}}" />
+            <TextBox
+                Margin="0,8,0,0"
+                Text="{Binding AccountName, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SaveCommand}" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button
+                Margin="0,18,0,0"
+                HorizontalAlignment="Left"
+                Command="{Binding SaveCommand}"
+                Content="{Binding [AddAccount.Save], Source={x:Static loc:Loc.Instance}}"
+                Style="{StaticResource PrimaryButton}" />
+        </StackPanel>
+
+        <TextBlock
+            Margin="0,14,0,0"
+            FontSize="12"
+            Foreground="{StaticResource Danger}"
+            Text="{Binding Error}"
+            TextWrapping="Wrap"
+            Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}" />
+
+        <Button
+            Margin="0,18,0,0"
+            HorizontalAlignment="Left"
+            Command="{Binding CancelCommand}"
+            Content="{Binding [AddAccount.Cancel], Source={x:Static loc:Loc.Instance}}"
+            Style="{StaticResource GhostButton}" />
+    </StackPanel>
+</Window>
