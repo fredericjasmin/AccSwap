@@ -177,7 +177,7 @@ public static class UpdateService
 
         string stableName = Path.Combine(
             Path.GetDirectoryName(exe)!,
-            "GLAS - Game Launcher Account Switcher.exe");
+            AppInfo.StableExeName);
         if (exe.Equals(stableName, StringComparison.OrdinalIgnoreCase))
         {
             if (changed)

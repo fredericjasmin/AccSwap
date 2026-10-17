@@ -16,5 +16,8 @@ public static class AppInfo
 
     public const string RepoName = "Game-Launcher-Account-Switcher";
 
+    /// <summary>The name a self-update renames the published exe to.</summary>
+    public const string StableExeName = "GLAS - Game Launcher Account Switcher.exe";
+
     public const string ReleasesUrl = "https://github.com/" + RepoOwner + "/" + RepoName + "/releases";
 }

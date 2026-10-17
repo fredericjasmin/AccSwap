@@ -71,6 +71,18 @@ public partial class App : Application
 
         UpdateService.CleanupPreviousUpdate();
 
+        if (services.Settings.AutoStart)
+        {
+            try
+            {
+                AutoStartService.RepairEntry(services.Registry);
+            }
+            catch
+            {
+                // Best effort: a stale entry only means no autostart.
+            }
+        }
+
         if (services.Settings.StartMinimized)
         {
             window.Hide();
