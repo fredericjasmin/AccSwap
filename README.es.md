@@ -21,7 +21,7 @@
 
 ## ¿Qué es AccSwap?
 
-AccSwap es un cambiador de cuentas para launchers de juegos en Windows, gratuito y de código abierto. Guarda la sesión iniciada de cada cuenta en tu máquina, así que cambiar de cuenta es un clic — sin volver a escribir contraseñas, sin códigos 2FA, sin códigos por email.
+AccSwap es un cambiador de cuentas para launchers de juegos en Windows, gratuito y de código abierto. Guarda la sesión iniciada de cada cuenta en tu máquina, así que cambiar de cuenta es un clic, sin volver a escribir contraseñas, sin códigos 2FA, sin códigos por email.
 
 Todo queda en tu PC: AccSwap no tiene servidores, no requiere cuenta y no envía telemetría.
 
@@ -29,10 +29,10 @@ Todo queda en tu PC: AccSwap no tiene servidores, no requiere cuenta y no envía
 
 - Cambio de cuenta con un clic por plataforma, con la cuenta activa resaltada
 - "Agregar cuenta" captura tu sesión actual; "Guardar sesión" guarda la cuenta con la que estás dentro
-- Icono en la bandeja con la lista completa de cuentas — cambia sin abrir la ventana (atajo global `Ctrl+Alt+G`)
+- Icono en la bandeja con la lista completa de cuentas: cambia sin abrir la ventana (atajo global `Ctrl+Alt+G`)
 - Detección automática de launchers, incluidos los instalados en discos secundarios, con ruta manual por plataforma
 - Actualización automática: AccSwap revisa GitHub Releases y se actualiza solo
-- Exportar / importar cuentas y ajustes entre equipos (la importación es aditiva — nunca borra lo que ya tienes)
+- Exportar / importar cuentas y ajustes entre equipos (la importación es aditiva: nunca borra lo que ya tienes)
 - Protección opcional con contraseña para los snapshots de cuentas (PBKDF2 + AES-GCM)
 - Español e inglés, elegido según el idioma de tu sistema
 - Un solo `.exe` portátil, sin instalador
@@ -57,7 +57,7 @@ Descarga `AccSwap-vX.Y.Z.exe` desde la [última release](https://github.com/fred
 
 1. Abre AccSwap y elige la pestaña de la plataforma (Steam, Epic, ...).
 2. Inicia sesión en el launcher con la cuenta que quieres agregar.
-3. En AccSwap, pulsa **Agregar cuenta** — la sesión queda guardada localmente.
+3. En AccSwap, pulsa **Agregar cuenta**: la sesión queda guardada localmente.
 4. Inicia sesión con otra cuenta en el launcher y repite.
 5. Pulsa **Cambiar** en cualquier tarjeta para saltar a esa cuenta. AccSwap cierra el launcher, restaura la sesión y lo vuelve a abrir.
 

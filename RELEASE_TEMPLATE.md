@@ -1,4 +1,4 @@
-# Versionado y Release Notes — AccSwap
+# Versionado y Release Notes - AccSwap
 
 ## Esquema de versiones (SemVer)
 
@@ -62,8 +62,8 @@ Fecha: YYYY-MM-DD
   ("Más información -> Ejecutar de todas formas").
 
 ### Historial de versiones
-- **v{X.Y.Z}** — esta release.
-- **v{X.Y.(Z-1)}** — (una línea con lo esencial; copiar el bloque de la
+- **v{X.Y.Z}**: esta release.
+- **v{X.Y.(Z-1)}**: (una línea con lo esencial; copiar el bloque de la
   release anterior y añadirlo debajo).
 
 ---
@@ -77,7 +77,7 @@ Fecha: YYYY-MM-DD
 - Mantenimiento y correcciones menores.
 
 ### Historial de versiones
-- **v{X.Y.Z}** — esta release.
+- **v{X.Y.Z}**: esta release.
 - (bloques anteriores)
 
 Más detalles en [los commits](https://github.com/fredericjasmin/AccSwap/commits/main).

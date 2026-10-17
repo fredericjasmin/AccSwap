@@ -21,7 +21,7 @@
 
 ## What is AccSwap?
 
-AccSwap is a free, open-source account switcher for Windows game launchers. It saves the login session of each account on your machine, so switching accounts is one click — no re-entering passwords, no 2FA prompts, no email codes.
+AccSwap is a free, open-source account switcher for Windows game launchers. It saves the login session of each account on your machine, so switching accounts is one click: no re-entering passwords, no 2FA prompts, no email codes.
 
 Everything stays on your PC: AccSwap has no servers, no accounts and no telemetry.
 
@@ -29,10 +29,10 @@ Everything stays on your PC: AccSwap has no servers, no accounts and no telemetr
 
 - One-click account switching per platform, with the active account highlighted
 - "Add account" captures your current session; "Save session" stores the account you're logged in with
-- System tray icon with the full account list — switch without opening the window (global hotkey `Ctrl+Alt+G`)
+- System tray icon with the full account list: switch without opening the window (global hotkey `Ctrl+Alt+G`)
 - Automatic launcher detection, including installations on secondary drives, with manual path override per platform
 - Auto-update: AccSwap checks GitHub Releases and updates itself
-- Export / import accounts and settings between machines (import is additive — it never deletes what you already have)
+- Export / import accounts and settings between machines (import is additive: it never deletes what you already have)
 - Optional password protection for account snapshots (PBKDF2 + AES-GCM)
 - English and Spanish, picked from your system language
 - Single portable `.exe`, no installer needed
@@ -57,7 +57,7 @@ Grab `AccSwap-vX.Y.Z.exe` from the [latest release](https://github.com/fredericj
 
 1. Open AccSwap and pick a platform tab (Steam, Epic, ...).
 2. Log into the launcher with the account you want to add.
-3. In AccSwap, click **Add account** — the session is captured locally.
+3. In AccSwap, click **Add account**: the session is captured locally.
 4. Log into the launcher with another account and repeat.
 5. Click **Switch** on any card to jump to that account. AccSwap closes the launcher, restores the session and relaunches it.
 

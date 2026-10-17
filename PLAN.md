@@ -52,47 +52,47 @@ AccSwap.slnx
 
 Reglas de diseño (cumplidas):
 - `AccSwap.Core` nunca toca la instalación real en los tests: rutas, registro y procesos inyectados.
-- Toda escritura del launcher pasa por `SwitchTransaction` (backup → escribir → rollback si algo falla) — verificado con tests de fallo inyectado.
+- Toda escritura del launcher pasa por `SwitchTransaction` (backup → escribir → rollback si algo falla), verificado con tests de fallo inyectado.
 - Cada plataforma es un módulo independiente tras `IPlatform`.
 
 ## 3. Fases
 
-### Fase 0 — Setup [COMPLETADA]
+### Fase 0: Setup [COMPLETADA]
 - [x] Solución .NET 10 (LTS): AccSwap.Core + AccSwap.App + AccSwap.Core.Tests (xUnit)
 
-### Fase 1 — Core sin UI [COMPLETADA]
+### Fase 1: Core sin UI [COMPLETADA]
 - [x] `IPlatform` + `PlatformRegistry`
 - [x] `EpicPlatform` (con detección de activa por hash)
 - [x] `SteamPlatform` con parser/escritor VDF seguro
 - [x] Gestor de snapshots (guardar, listar, renombrar, borrar)
 - [x] Tests unitarios con directorios simulados
 
-### Fase 1b — Motor genérico declarativo [COMPLETADA]
+### Fase 1b: Motor genérico declarativo [COMPLETADA]
 - [x] `GenericPlatform` + `PlatformDefinition` (JSON): archivos, globs, directorios, valores de registro y campos JSON como objetivos de sesión
 - [x] Catálogo embebido `platforms.json` + override de usuario en `%APPDATA%\AccSwap\platforms.json`
 - [x] Plataformas nuevas: **Riot Games, Ubisoft Connect, Escape from Tarkov, Battle.net, EA Desktop, GOG Galaxy, Discord, Roblox** (definiciones del catálogo embebido)
 - [x] Tests del motor (capture/switch/rollback/add-new-login por cada tipo de objetivo)
 
-### Fase 2 — Robustez y seguridad [COMPLETADA]
+### Fase 2: Robustez y seguridad [COMPLETADA]
 - [x] Switch transaccional con rollback de archivos y registro (tests con fallo inyectado)
 - [x] Escritura atómica (temporal + `File.Replace`)
 - [x] Cifrado opcional de snapshots con contraseña (AES-256-GCM + PBKDF2-SHA256 100k)
 - [x] Export/import de todas las cuentas (`.accswap`, cifrado opcional)
 
-### Fase 3 — UI [COMPLETADA]
+### Fase 3: UI [COMPLETADA]
 - [x] Ventana principal: tarjetas de cuenta con iniciales, plataforma y pill "Activa"
 - [x] Switch con un clic + barra de estado con progreso
 - [x] Icono en bandeja con menú por plataforma → cuenta (switch desde la bandeja)
 - [x] Hotkey global Ctrl+Alt+G
 - [x] Cerrar a bandeja + arranque con Windows (registro Run)
 
-### Fase 4 — Extras [PARCIAL]
+### Fase 4: Extras [PARCIAL]
 - [x] Modo "añadir cuenta": cierra sesión real, abre el login del launcher y captura con nombre
 - [x] Botón "Guardar sesión actual": captura la sesión ya iniciada sin repetir login
 - [x] Diálogo de alta muestra todas las plataformas (no instaladas en gris) y preselecciona la activa
 - [x] Multi-idioma ES/EN (conmutable en ajustes)
 - [x] Publicación verificada: exe único framework-dependent (~600 KB) en `publish/`
-- [ ] Más plataformas: las de mayor riesgo quedan fuera del catálogo (Origin, Rockstar, PS Remote Play, Magic Arena — requieren resolución de carpeta de instalación o leveldb)
+- [ ] Más plataformas: las de mayor riesgo quedan fuera del catálogo (Origin, Rockstar, PS Remote Play, Magic Arena: requieren resolución de carpeta de instalación o leveldb)
 - [ ] Atajos de escritorio por cuenta
 - [ ] Auto-updater + instalador (NSIS/WiX)
 
